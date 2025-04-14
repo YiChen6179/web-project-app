@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yichen.dao.UserMapper">
+    <insert id="addUser">
+        insert into user(username,password,email,tel) values(#{username},#{password},#{email},#{tel})
+    </insert>
+    <update id="updateUser">
+        update user set username = #{username},password = #{password},email = #{email},tel = #{tel} where id = #{id}
+    </update>
+    <delete id="deleteUser">
+        delete  from user where id = #{id}
+    </delete>
+    <select id="getAllUsers" resultType="com.yichen.po.User">
+        select * from user
+    </select>
+    <select id="getUserById" resultType="com.yichen.po.User">
+        select * from user where id = #{id}
+    </select>
+</mapper>
