@@ -3,6 +3,7 @@ package com.yichen.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yichen.entity.ParkingSpot;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 停车位服务接口
@@ -19,4 +20,7 @@ public interface ParkingSpotService extends IService<ParkingSpot> {
      * @return 停车位分页数据
      */
     Page<ParkingSpot> listParkingSpots(Integer current, Integer size, String spotNumber, Long zoneId, Integer status);
-} 
+
+    @Transactional(rollbackFor = Exception.class)
+    boolean removeById(Long id);
+}

@@ -19,5 +19,4 @@ public class ParkingLot {
     private String lotName;
     private String address;
     private Integer totalSpot;
-    private Integer availableSpot;
 }

@@ -27,6 +27,12 @@ public class Result<T> {
     public static <T> Result<T> error() {
         return new Result<>(500, "操作失败", null);
     }
+    public static <T> Result<T> error(T data) {
+        return new Result<>(500, "操作失败",  data);
+    }
+    public static <T> Result<T> error(String message,T data) {
+        return new Result<>(500, message,  data);
+    }
 
     public static <T> Result<T> error(String message) {
         return new Result<>(500, message, null);
@@ -38,4 +44,4 @@ public class Result<T> {
     public static Result<Void> success(String message) {
         return new Result<>(200, message, null);
     }
-} 
+}

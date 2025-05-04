@@ -24,4 +24,11 @@ public interface ParkingRecordService extends IService<ParkingRecord> {
      * @return 更新后的停车记录
      */
     ParkingRecord exitParking(Long id);
+    
+    /**
+     * 创建停车记录（车辆入场）
+     * @param record 停车记录
+     * @return 停车记录
+     */
+    ParkingRecord createParkingRecord(ParkingRecord record);
 } 

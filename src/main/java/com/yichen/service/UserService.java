@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yichen.entity.User;
 import com.yichen.vo.UserVO;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 用户服务接口
@@ -24,4 +25,7 @@ public interface UserService extends IService<User> {
      * @return 用户VO
      */
     UserVO getUserById(Long id);
-} 
+
+    @Transactional(rollbackFor = Exception.class)
+    boolean removeById(Long id);
+}

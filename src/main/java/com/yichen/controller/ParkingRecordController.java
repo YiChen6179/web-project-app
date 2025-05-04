@@ -39,7 +39,7 @@ public class ParkingRecordController {
             @ApiParam(value = "车辆ID", example = "1") 
             @RequestParam(required = false) Long vehicleId,
             
-            @ApiParam(value = "状态(0-已完成，1-停车中)", example = "1", allowableValues = "0, 1") 
+            @ApiParam(value = "状态(0-空闲中，1-停车中)", example = "1", allowableValues = "0, 1")
             @RequestParam(required = false) Integer status) {
         
         Page<ParkingRecord> page = parkingRecordService.listParkingRecords(current, size, vehicleId, status);
@@ -77,12 +77,9 @@ public class ParkingRecordController {
             @ApiParam(value = "停车记录信息", required = true) 
             @RequestBody ParkingRecordVO parkingRecordVO) {
         ParkingRecord parkingRecord = beanConverter.convert(parkingRecordVO, ParkingRecord.class);
-        boolean success = parkingRecordService.save(parkingRecord);
-        if (success) {
-            ParkingRecordVO resultVO = beanConverter.convert(parkingRecord, ParkingRecordVO.class);
-            return Result.success(resultVO);
-        }
-        return Result.error("添加停车记录失败");
+        ParkingRecord result = parkingRecordService.createParkingRecord(parkingRecord);
+        ParkingRecordVO resultVO = beanConverter.convert(result, ParkingRecordVO.class);
+        return Result.success(resultVO);
     }
 
     @PutMapping
@@ -136,9 +133,6 @@ public class ParkingRecordController {
             @ApiParam(value = "停车记录ID", required = true, example = "1") 
             @PathVariable Long id) {
         ParkingRecord parkingRecord = parkingRecordService.exitParking(id);
-        if (parkingRecord == null) {
-            return Result.error("车辆出场失败");
-        }
         ParkingRecordVO parkingRecordVO = beanConverter.convert(parkingRecord, ParkingRecordVO.class);
         return Result.success(parkingRecordVO);
     }

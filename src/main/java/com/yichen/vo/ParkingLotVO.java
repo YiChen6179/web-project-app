@@ -18,7 +18,5 @@ public class ParkingLotVO {
     
     @ApiModelProperty(value = "总车位数", example = "100", position = 4)
     private Integer totalSpot;
-    
-    @ApiModelProperty(value = "可用车位数", example = "50", position = 5)
-    private Integer availableSpot;
+
 }

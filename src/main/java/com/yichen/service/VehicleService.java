@@ -3,6 +3,7 @@ package com.yichen.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yichen.entity.Vehicle;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 车辆服务接口
@@ -17,4 +18,7 @@ public interface VehicleService extends IService<Vehicle> {
      * @return 车辆分页数据
      */
     Page<Vehicle> listVehicles(Integer current, Integer size, String plateNumber, Long userId);
-} 
+
+    @Transactional(rollbackFor = Exception.class)
+    boolean removeById(Long id);
+}
