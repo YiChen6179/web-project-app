@@ -42,7 +42,7 @@ public class ParkingSpotController {
             @ApiParam(value = "停车区ID", example = "1") 
             @RequestParam(required = false) Long zoneId,
             
-            @ApiParam(value = "状态", example = "0", notes = "0-空闲，1-占用", allowableValues = "0, 1") 
+            @ApiParam(value = "状态(0-空闲，1-占用)", example = "0", allowableValues = "0, 1") 
             @RequestParam(required = false) Integer status) {
         
         Page<ParkingSpot> page = parkingSpotService.listParkingSpots(current, size, spotNumber, zoneId, status);
@@ -61,7 +61,7 @@ public class ParkingSpotController {
     public Result<ParkingSpotVO> getById(
             @ApiParam(value = "停车位ID", required = true, example = "1") 
             @PathVariable Long id) {
-        ParkingSpot parkingSpot = parkingSpotService.getParkingSpotById(id);
+        ParkingSpot parkingSpot = parkingSpotService.getById(id);
         if (parkingSpot == null) {
             return Result.error("停车位不存在");
         }
@@ -80,10 +80,9 @@ public class ParkingSpotController {
             @ApiParam(value = "停车位信息", required = true) 
             @RequestBody ParkingSpotVO parkingSpotVO) {
         ParkingSpot parkingSpot = beanConverter.convert(parkingSpotVO, ParkingSpot.class);
-        boolean success = parkingSpotService.addParkingSpot(parkingSpot);
+        boolean success = parkingSpotService.save(parkingSpot);
         if (success) {
-            ParkingSpot result = parkingSpotService.getParkingSpotById(parkingSpot.getId());
-            ParkingSpotVO resultVO = beanConverter.convert(result, ParkingSpotVO.class);
+            ParkingSpotVO resultVO = beanConverter.convert(parkingSpot, ParkingSpotVO.class);
             return Result.success(resultVO);
         }
         return Result.error("添加停车位失败");
@@ -104,7 +103,7 @@ public class ParkingSpotController {
             return Result.error("停车位ID不能为空");
         }
         ParkingSpot parkingSpot = beanConverter.convert(parkingSpotVO, ParkingSpot.class);
-        boolean success = parkingSpotService.updateParkingSpot(parkingSpot);
+        boolean success = parkingSpotService.updateById(parkingSpot);
         if (success) {
             return Result.success();
         }
@@ -121,7 +120,7 @@ public class ParkingSpotController {
     public Result<Void> delete(
             @ApiParam(value = "停车位ID", required = true, example = "1") 
             @PathVariable Long id) {
-        boolean success = parkingSpotService.deleteParkingSpot(id);
+        boolean success = parkingSpotService.removeById(id);
         if (success) {
             return Result.success();
         }

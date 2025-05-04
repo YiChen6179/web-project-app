@@ -1,7 +1,7 @@
 package com.yichen.config;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.yichen.dao.UserMapper;
+import com.yichen.mapper.UserMapper;
 import com.yichen.entity.User;
 import com.yichen.utils.PasswordEncoder;
 import lombok.RequiredArgsConstructor;

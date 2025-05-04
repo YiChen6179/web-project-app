@@ -1,12 +1,13 @@
 package com.yichen.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.yichen.dao.UserMapper;
+import com.yichen.mapper.UserMapper;
 import com.yichen.entity.User;
 import com.yichen.service.AuthService;
 import com.yichen.utils.BeanConverter;
+import com.yichen.utils.JwtUtil;
 import com.yichen.utils.PasswordEncoder;
-import com.yichen.utils.UserSession;
+import com.yichen.vo.TokenVO;
 import com.yichen.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,11 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    private final UserSession userSession;
     private final BeanConverter beanConverter;
+    private final JwtUtil jwtUtil;
 
     @Override
-    public UserVO login(String username, String password) {
+    public TokenVO login(String username, String password) {
         // 根据用户名查询
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, username);
@@ -29,16 +30,15 @@ public class AuthServiceImpl implements AuthService {
         
         // 判断用户是否存在以及密码是否正确
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            // 设置用户会话
-            User sessionUser = new User();
-            sessionUser.setId(user.getId());
-            sessionUser.setUsername(user.getUsername());
-            sessionUser.setEmail(user.getEmail());
-            sessionUser.setTel(user.getTel());
-            userSession.setCurrentUser(sessionUser);
+            // 生成token
+            String token = jwtUtil.generateToken(user.getId(), user.getUsername());
             
-            // 返回用户VO对象
-            return beanConverter.convert(user, UserVO.class);
+            // 创建并返回TokenVO
+            TokenVO tokenVO = new TokenVO();
+            tokenVO.setToken(token);
+            tokenVO.setUser(beanConverter.convert(user, UserVO.class));
+            
+            return tokenVO;
         }
         
         return null;
@@ -46,8 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean logout() {
-        // 清除用户会话
-        userSession.clear();
+        // 无状态认证不需要服务端处理登出
         return true;
     }
 } 

@@ -55,7 +55,7 @@ public class ParkingLotController {
     public Result<ParkingLotVO> getById(
             @ApiParam(value = "停车场ID", required = true, example = "1") 
             @PathVariable Long id) {
-        ParkingLot parkingLot = parkingLotService.getParkingLotById(id);
+        ParkingLot parkingLot = parkingLotService.getById(id);
         if (parkingLot == null) {
             return Result.error("停车场不存在");
         }
@@ -74,10 +74,9 @@ public class ParkingLotController {
             @ApiParam(value = "停车场信息", required = true) 
             @RequestBody ParkingLotVO parkingLotVO) {
         ParkingLot parkingLot = beanConverter.convert(parkingLotVO, ParkingLot.class);
-        boolean success = parkingLotService.addParkingLot(parkingLot);
+        boolean success = parkingLotService.save(parkingLot);
         if (success) {
-            ParkingLot result = parkingLotService.getParkingLotById(parkingLot.getId());
-            ParkingLotVO resultVO = beanConverter.convert(result, ParkingLotVO.class);
+            ParkingLotVO resultVO = beanConverter.convert(parkingLot, ParkingLotVO.class);
             return Result.success(resultVO);
         }
         return Result.error("添加停车场失败");
@@ -98,7 +97,7 @@ public class ParkingLotController {
             return Result.error("停车场ID不能为空");
         }
         ParkingLot parkingLot = beanConverter.convert(parkingLotVO, ParkingLot.class);
-        boolean success = parkingLotService.updateParkingLot(parkingLot);
+        boolean success = parkingLotService.updateById(parkingLot);
         if (success) {
             return Result.success();
         }
@@ -115,7 +114,7 @@ public class ParkingLotController {
     public Result<Void> delete(
             @ApiParam(value = "停车场ID", required = true, example = "1") 
             @PathVariable Long id) {
-        boolean success = parkingLotService.deleteParkingLot(id);
+        boolean success = parkingLotService.removeById(id);
         if (success) {
             return Result.success();
         }

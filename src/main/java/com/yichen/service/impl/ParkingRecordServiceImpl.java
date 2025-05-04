@@ -53,7 +53,6 @@ public class ParkingRecordServiceImpl extends ServiceImpl<ParkingRecordMapper, P
             if (hours < 0) {
                 hours = 0;
             }
-            record.setFee(hours * 10.0);
         }
         
         updateById(record);

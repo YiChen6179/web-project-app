@@ -71,7 +71,7 @@ public class UserController {
             @ApiParam(value = "用户信息", required = true) 
             @RequestBody UserVO userVO) {
         User user = beanConverter.convert(userVO, User.class);
-        boolean success = userService.addUser(user);
+        boolean success = userService.save(user);
         if (success) {
             UserVO resultVO = userService.getUserById(user.getId());
             return Result.success(resultVO);
@@ -94,7 +94,7 @@ public class UserController {
             return Result.error("用户ID不能为空");
         }
         User user = beanConverter.convert(userVO, User.class);
-        boolean success = userService.updateUser(user);
+        boolean success = userService.updateById(user);
         if (success) {
             return Result.success();
         }
@@ -111,7 +111,7 @@ public class UserController {
     public Result<Void> delete(
             @ApiParam(value = "用户ID", required = true, example = "1") 
             @PathVariable Long id) {
-        boolean success = userService.deleteUser(id);
+        boolean success = userService.removeById(id);
         if (success) {
             return Result.success();
         }

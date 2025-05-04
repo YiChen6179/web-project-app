@@ -38,7 +38,7 @@ public class VehicleController {
     @GetMapping("/{id}")
     @ApiOperation("根据ID获取车辆")
     public Result<VehicleVO> getById(@ApiParam("车辆ID") @PathVariable Long id) {
-        Vehicle vehicle = vehicleService.getVehicleById(id);
+        Vehicle vehicle = vehicleService.getById(id);
         if (vehicle == null) {
             return Result.error("车辆不存在");
         }
@@ -50,10 +50,9 @@ public class VehicleController {
     @ApiOperation("添加车辆")
     public Result<VehicleVO> add(@RequestBody VehicleVO vehicleVO) {
         Vehicle vehicle = beanConverter.convert(vehicleVO, Vehicle.class);
-        boolean success = vehicleService.addVehicle(vehicle);
+        boolean success = vehicleService.save(vehicle);
         if (success) {
-            Vehicle result = vehicleService.getVehicleById(vehicle.getId());
-            VehicleVO resultVO = beanConverter.convert(result, VehicleVO.class);
+            VehicleVO resultVO = beanConverter.convert(vehicle, VehicleVO.class);
             return Result.success(resultVO);
         }
         return Result.error("添加车辆失败");
@@ -66,7 +65,7 @@ public class VehicleController {
             return Result.error("车辆ID不能为空");
         }
         Vehicle vehicle = beanConverter.convert(vehicleVO, Vehicle.class);
-        boolean success = vehicleService.updateVehicle(vehicle);
+        boolean success = vehicleService.updateById(vehicle);
         if (success) {
             return Result.success();
         }
@@ -76,7 +75,7 @@ public class VehicleController {
     @DeleteMapping("/{id}")
     @ApiOperation("删除车辆")
     public Result<Void> delete(@ApiParam("车辆ID") @PathVariable Long id) {
-        boolean success = vehicleService.deleteVehicle(id);
+        boolean success = vehicleService.removeById(id);
         if (success) {
             return Result.success();
         }

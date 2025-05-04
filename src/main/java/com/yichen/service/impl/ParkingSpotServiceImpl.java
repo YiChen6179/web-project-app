@@ -24,7 +24,7 @@ public class ParkingSpotServiceImpl extends ServiceImpl<ParkingSpotMapper, Parki
         }
         
         if (zoneId != null) {
-            queryWrapper.eq(ParkingSpot::getZoneId, zoneId);
+            queryWrapper.eq(ParkingSpot::getParkingZoneId, zoneId);
         }
         
         if (status != null) {

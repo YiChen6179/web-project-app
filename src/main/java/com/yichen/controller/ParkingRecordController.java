@@ -39,7 +39,7 @@ public class ParkingRecordController {
             @ApiParam(value = "车辆ID", example = "1") 
             @RequestParam(required = false) Long vehicleId,
             
-            @ApiParam(value = "状态", example = "1", notes = "0-已完成，1-停车中", allowableValues = "0, 1") 
+            @ApiParam(value = "状态(0-已完成，1-停车中)", example = "1", allowableValues = "0, 1") 
             @RequestParam(required = false) Integer status) {
         
         Page<ParkingRecord> page = parkingRecordService.listParkingRecords(current, size, vehicleId, status);
@@ -58,7 +58,7 @@ public class ParkingRecordController {
     public Result<ParkingRecordVO> getById(
             @ApiParam(value = "停车记录ID", required = true, example = "1") 
             @PathVariable Long id) {
-        ParkingRecord parkingRecord = parkingRecordService.getParkingRecordById(id);
+        ParkingRecord parkingRecord = parkingRecordService.getById(id);
         if (parkingRecord == null) {
             return Result.error("停车记录不存在");
         }
@@ -77,10 +77,9 @@ public class ParkingRecordController {
             @ApiParam(value = "停车记录信息", required = true) 
             @RequestBody ParkingRecordVO parkingRecordVO) {
         ParkingRecord parkingRecord = beanConverter.convert(parkingRecordVO, ParkingRecord.class);
-        boolean success = parkingRecordService.addParkingRecord(parkingRecord);
+        boolean success = parkingRecordService.save(parkingRecord);
         if (success) {
-            ParkingRecord result = parkingRecordService.getParkingRecordById(parkingRecord.getId());
-            ParkingRecordVO resultVO = beanConverter.convert(result, ParkingRecordVO.class);
+            ParkingRecordVO resultVO = beanConverter.convert(parkingRecord, ParkingRecordVO.class);
             return Result.success(resultVO);
         }
         return Result.error("添加停车记录失败");
@@ -101,7 +100,7 @@ public class ParkingRecordController {
             return Result.error("停车记录ID不能为空");
         }
         ParkingRecord parkingRecord = beanConverter.convert(parkingRecordVO, ParkingRecord.class);
-        boolean success = parkingRecordService.updateParkingRecord(parkingRecord);
+        boolean success = parkingRecordService.updateById(parkingRecord);
         if (success) {
             return Result.success();
         }
@@ -118,7 +117,7 @@ public class ParkingRecordController {
     public Result<Void> delete(
             @ApiParam(value = "停车记录ID", required = true, example = "1") 
             @PathVariable Long id) {
-        boolean success = parkingRecordService.deleteParkingRecord(id);
+        boolean success = parkingRecordService.removeById(id);
         if (success) {
             return Result.success();
         }

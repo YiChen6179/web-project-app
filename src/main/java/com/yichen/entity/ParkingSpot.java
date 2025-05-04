@@ -17,5 +17,8 @@ public class ParkingSpot {
     @TableId(type = IdType.AUTO)
     private Long id;
     private Long parkingZoneId;
+    private String spotNumber;
+    private Double length;
+    private Double width;
     private Integer status; // 0-空闲，1-占用
 }

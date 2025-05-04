@@ -20,7 +20,7 @@ public class ParkingLotServiceImpl extends ServiceImpl<ParkingLotMapper, Parking
         LambdaQueryWrapper<ParkingLot> queryWrapper = new LambdaQueryWrapper<>();
         
         if (name != null && !name.isEmpty()) {
-            queryWrapper.like(ParkingLot::getName, name);
+            queryWrapper.like(ParkingLot::getLotName, name);
         }
         
         return getBaseMapper().selectPage(page, queryWrapper);

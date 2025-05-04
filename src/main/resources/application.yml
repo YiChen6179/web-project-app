@@ -44,6 +44,9 @@ knife4j:
     description: 停车场管理系统接口文档
     email: admin@example.com
     version: 1.0
+    authorization:
+      type: bearer
+      name: Authorization
     group:
       default:
         group-name: 默认分组

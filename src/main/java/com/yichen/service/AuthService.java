@@ -1,8 +1,8 @@
 package com.yichen.service;
 
-import com.yichen.vo.UserVO;
+import com.yichen.vo.TokenVO;
 
 public interface AuthService {
-    UserVO login(String username, String password);
+    TokenVO login(String username, String password);
     boolean logout();
 } 

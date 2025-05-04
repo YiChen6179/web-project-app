@@ -58,7 +58,7 @@ public class ParkingZoneController {
     public Result<ParkingZoneVO> getById(
             @ApiParam(value = "停车区ID", required = true, example = "1") 
             @PathVariable Long id) {
-        ParkingZone parkingZone = parkingZoneService.getParkingZoneById(id);
+        ParkingZone parkingZone = parkingZoneService.getById(id);
         if (parkingZone == null) {
             return Result.error("停车区不存在");
         }
@@ -77,10 +77,9 @@ public class ParkingZoneController {
             @ApiParam(value = "停车区信息", required = true) 
             @RequestBody ParkingZoneVO parkingZoneVO) {
         ParkingZone parkingZone = beanConverter.convert(parkingZoneVO, ParkingZone.class);
-        boolean success = parkingZoneService.addParkingZone(parkingZone);
+        boolean success = parkingZoneService.save(parkingZone);
         if (success) {
-            ParkingZone result = parkingZoneService.getParkingZoneById(parkingZone.getId());
-            ParkingZoneVO resultVO = beanConverter.convert(result, ParkingZoneVO.class);
+            ParkingZoneVO resultVO = beanConverter.convert(parkingZone, ParkingZoneVO.class);
             return Result.success(resultVO);
         }
         return Result.error("添加停车区失败");
@@ -101,7 +100,7 @@ public class ParkingZoneController {
             return Result.error("停车区ID不能为空");
         }
         ParkingZone parkingZone = beanConverter.convert(parkingZoneVO, ParkingZone.class);
-        boolean success = parkingZoneService.updateParkingZone(parkingZone);
+        boolean success = parkingZoneService.updateById(parkingZone);
         if (success) {
             return Result.success();
         }
@@ -118,7 +117,7 @@ public class ParkingZoneController {
     public Result<Void> delete(
             @ApiParam(value = "停车区ID", required = true, example = "1") 
             @PathVariable Long id) {
-        boolean success = parkingZoneService.deleteParkingZone(id);
+        boolean success = parkingZoneService.removeById(id);
         if (success) {
             return Result.success();
         }

@@ -2,7 +2,6 @@ package com.yichen.user;
 
 import com.yichen.mapper.UserMapper;
 import com.yichen.entity.User;
-import com.yichen.utils.MybatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 
