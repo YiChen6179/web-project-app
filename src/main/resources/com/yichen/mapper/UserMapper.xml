@@ -10,10 +10,10 @@
     <delete id="deleteUser">
         delete  from user where id = #{id}
     </delete>
-    <select id="getAllUsers" resultType="com.yichen.po.User">
+    <select id="getAllUsers" resultType="com.yichen.entity.User">
         select * from user
     </select>
-    <select id="getUserById" resultType="com.yichen.po.User">
+    <select id="getUserById" resultType="com.yichen.entity.User">
         select * from user where id = #{id}
     </select>
 </mapper>
