@@ -1,5 +1,7 @@
 package com.yichen.service;
 
+import com.yichen.entity.ParkingSpot;
+
 /**
  * 实体逻辑约束服务接口
  * 处理实体间的逻辑外键约束关系
@@ -69,4 +71,9 @@ public interface ConstraintService {
      * @return 如果车牌号唯一返回true，否则返回false
      */
     boolean isPlateNumberUnique(String plateNumber, Long excludeVehicleId);
+
+    /**
+     * 根据停车区域id获取该车位的停车位号码
+     */
+    String getSpotNumberByParkingZoneId(ParkingSpot parkingSpot);
 } 

@@ -17,6 +17,7 @@ public class ConstraintServiceImpl implements ConstraintService {
     private final ParkingZoneMapper parkingZoneMapper;
     private final ParkingSpotMapper parkingSpotMapper;
     private final ParkingRecordMapper parkingRecordMapper;
+    private final ParkingLotMapper parkingLotMapper;
     private final VehicleMapper vehicleMapper;
     private final UserMapper userMapper;
 
@@ -124,5 +125,11 @@ public class ConstraintServiceImpl implements ConstraintService {
         }
         
         return vehicleMapper.selectCount(vehicleQuery) == 0;
+    }
+
+    @Override
+    public String getSpotNumberByParkingZoneId(ParkingSpot parkingSpot) {
+        ParkingZone parkingZone = parkingZoneMapper.selectById(parkingSpot.getParkingZoneId());
+        return parkingZone.getZoneName()  + parkingSpot.getId();
     }
 } 

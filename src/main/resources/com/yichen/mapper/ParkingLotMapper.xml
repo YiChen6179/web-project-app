@@ -2,5 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yichen.mapper.ParkingLotMapper">
+    <!-- 查询停车场及其统计信息（带分页） -->
+    <select id="selectWithStatisticsPage" resultType="com.yichen.entity.ParkingLot">
+        SELECT 
+            pl.id,
+            pl.lot_name AS lotName,
+            pl.address,
+            COUNT(ps.id) AS totalSpot,
+            SUM(CASE WHEN ps.status = 1 THEN 1 ELSE 0 END) AS usedSpot
+        FROM parking_lot pl
+        LEFT JOIN parking_zone pz ON pl.id = pz.parking_lot_id
+        LEFT JOIN parking_spot ps ON pz.id = ps.parking_zone_id
+        <where>
+            <if test="name != null and name != ''">
+                AND pl.lot_name LIKE CONCAT('%', #{name}, '%')
+            </if>
+        </where>
+        GROUP BY pl.id
+        LIMIT #{current}, #{size}
+    </select>
 
+    <!-- 获取停车场总数量（用于分页计算） -->
+    <select id="countWithStatistics" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM parking_lot pl
+    </select>
+
+    <select id="getByIdWithStatistics" resultType="com.yichen.entity.ParkingLot">
+        SELECT
+            pl.id,
+            pl.lot_name AS lotName,
+            pl.address,
+            COUNT(ps.id) AS totalParkingSpots,
+            SUM(CASE WHEN ps.status = 1 THEN 1 ELSE 0 END) AS occupiedSpots
+        FROM parking_lot pl
+        LEFT JOIN parking_zone pz ON pl.id = pz.parking_lot_id
+        LEFT JOIN parking_spot ps ON pz.id = ps.parking_zone_id
+       WHERE pl.id = #{id}
+    </select>
 </mapper>

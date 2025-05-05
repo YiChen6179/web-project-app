@@ -24,7 +24,7 @@ public class ParkingRecordVO {
     @ApiModelProperty(value = "停车时长(分钟)", example = "120", position = 5)
     private Long parkingTime;
     
-    @ApiModelProperty(value = "状态", example = "1", notes = "0-已完成，1-停车中", allowableValues = "0, 1", position = 6)
+    @ApiModelProperty(value = "状态", example = "1", notes = "0-停车中，1-已完成", allowableValues = "0, 1", position = 6)
     private Integer status;
     
     @ApiModelProperty(value = "车牌号", example = "京A12345", position = 7)

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 停车场服务实现类
  */
@@ -21,17 +23,6 @@ public class ParkingLotServiceImpl extends ServiceImpl<ParkingLotMapper, Parking
 
     private final ConstraintService constraintService;
 
-    @Override
-    public Page<ParkingLot> listParkingLots(Integer current, Integer size, String name) {
-        Page<ParkingLot> page = new Page<>(current, size);
-        LambdaQueryWrapper<ParkingLot> queryWrapper = new LambdaQueryWrapper<>();
-        
-        if (name != null && !name.isEmpty()) {
-            queryWrapper.like(ParkingLot::getLotName, name);
-        }
-        
-        return getBaseMapper().selectPage(page, queryWrapper);
-    }
     
     /**
      * 重写removeById方法，增加约束检查
@@ -43,5 +34,18 @@ public class ParkingLotServiceImpl extends ServiceImpl<ParkingLotMapper, Parking
             throw new ConstraintViolationException("无法删除该停车场，存在关联的停车区域");
         }
         return super.removeById(id);
+    }
+
+
+
+    @Override
+    public Page<ParkingLot> getParkingLotsWithStatisticsPage(Integer current, Integer size,String name) {
+        List<ParkingLot> parkingLots = getBaseMapper().selectWithStatisticsPage(current-1, size,  name);
+        return new Page<ParkingLot>(current, size).setRecords(parkingLots);
+    }
+
+    @Override
+    public ParkingLot getByIdWithStatistics(Long id) {
+        return getBaseMapper().getByIdWithStatistics(id);
     }
 } 

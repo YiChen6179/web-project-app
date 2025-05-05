@@ -43,7 +43,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         
         // 获取Authorization请求头中的Token
-        String authHeader = request.getHeader("token");
+        String authHeader = request.getHeader("Authorization");
         if (!StringUtils.hasText(authHeader) || !authHeader.startsWith("Bearer ")) {
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

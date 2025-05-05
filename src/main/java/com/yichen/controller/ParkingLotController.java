@@ -39,7 +39,7 @@ public class ParkingLotController {
             @ApiParam(value = "停车场名称", example = "中央广场停车场") 
             @RequestParam(required = false) String name) {
         
-        Page<ParkingLot> page = parkingLotService.listParkingLots(current, size, name);
+        Page<ParkingLot> page = parkingLotService.getParkingLotsWithStatisticsPage(current, size, name);
         Page<ParkingLotVO> result = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         result.setRecords(beanConverter.convertList(page.getRecords(), ParkingLotVO.class));
         return Result.success(result);
@@ -55,7 +55,7 @@ public class ParkingLotController {
     public Result<ParkingLotVO> getById(
             @ApiParam(value = "停车场ID", required = true, example = "1") 
             @PathVariable Long id) {
-        ParkingLot parkingLot = parkingLotService.getById(id);
+        ParkingLot parkingLot = parkingLotService.getByIdWithStatistics(id);
         if (parkingLot == null) {
             return Result.error("停车场不存在");
         }

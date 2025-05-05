@@ -176,9 +176,10 @@ public class ParkingRecordServiceImpl extends ServiceImpl<ParkingRecordMapper, P
         vehicleQuery.eq(Vehicle::getPlateNumber, plateNumber);
         Vehicle vehicle = vehicleService.getOne(vehicleQuery);
         
-        // 如果车辆存在，设置vehicleId
+        // 如果车辆存在，设置vehicleId和车牌号
         if (vehicle != null) {
             record.setVehicleId(vehicle.getId());
+            record.setPlateNumber(vehicle.getPlateNumber());
         }
         
         // 设置入场时间和状态
