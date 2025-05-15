@@ -24,4 +24,7 @@ public class ParkingSpotVO {
 
     @ApiModelProperty(value = "停车位宽度", example = "1.0",  position = 6)
     private Double width;
+
+    @ApiModelProperty(value = "所属停车场名称", example = "中央广场停车场", position = 7)
+    private String parkingLotName;
 }

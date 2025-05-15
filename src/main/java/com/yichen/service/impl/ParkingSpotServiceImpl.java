@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * 停车位服务实现类
  */
@@ -24,6 +27,7 @@ public class ParkingSpotServiceImpl extends ServiceImpl<ParkingSpotMapper, Parki
 
     private final ConstraintService constraintService;
     private final ParkingZoneService parkingZoneService;
+    private final ParkingSpotMapper parkingSpotMapper;
 
     @Override
     public Page<ParkingSpot> listParkingSpots(Integer current, Integer size, String spotNumber, Long zoneId, Integer status) {
@@ -42,7 +46,16 @@ public class ParkingSpotServiceImpl extends ServiceImpl<ParkingSpotMapper, Parki
             queryWrapper.eq(ParkingSpot::getStatus, status);
         }
         
-        return getBaseMapper().selectPage(page, queryWrapper);
+        Page<ParkingSpot> result = getBaseMapper().selectPage(page, queryWrapper);
+        
+        // 填充停车场名称
+        List<ParkingSpot> records = result.getRecords();
+        records.forEach(spot -> {
+            String lotName = getBaseMapper().getParkingLotNameBySpotId(spot.getId());
+            spot.setParkingLotName(lotName);
+        });
+        
+        return result;
     }
     
     /**
@@ -112,7 +125,16 @@ public class ParkingSpotServiceImpl extends ServiceImpl<ParkingSpotMapper, Parki
         }
         return super.removeById(id);
     }
-    
+
+    @Override
+    public List<ParkingSpot> listByParkingLot(String parkingLotName, Integer status) {
+        List<ParkingSpot> parkingSpots = parkingSpotMapper.listByParkingLot(parkingLotName, status);
+        for (ParkingSpot parkingSpot : parkingSpots) {
+            parkingSpot.setParkingLotName(parkingLotName);
+        }
+        return parkingSpots;
+    }
+
     /**
      * 检查停车位当前是否可用（状态为空闲）
      * @param id 停车位ID

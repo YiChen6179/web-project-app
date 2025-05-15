@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yichen.entity.ParkingSpot;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 停车位服务接口
  */
@@ -23,4 +25,6 @@ public interface ParkingSpotService extends IService<ParkingSpot> {
 
     @Transactional(rollbackFor = Exception.class)
     boolean removeById(Long id);
+
+    List<ParkingSpot> listByParkingLot(String parkingLotName, Integer status);
 }

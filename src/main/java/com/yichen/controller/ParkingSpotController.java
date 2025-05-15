@@ -12,12 +12,16 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/parking-spot")
 @Api(tags = "停车位管理", description = "提供停车位的增删改查接口")
 @RequiredArgsConstructor
+@Slf4j
 public class ParkingSpotController {
 
     private final ParkingSpotService parkingSpotService;
@@ -125,5 +129,18 @@ public class ParkingSpotController {
             return Result.success();
         }
         return Result.error("删除停车位失败");
+    }
+
+    //根据停车场获取所属停车位
+    @PostMapping("/listByParkingLot")
+    @ApiOperation(value = "根据停车场获取所属停车位", notes = "根据停车场名称获取所属停车位")
+    public Result<List<ParkingSpotVO>> listByParkingLot(
+            @ApiParam(value = "停车场名称", required = true)
+            @RequestParam String parkingLotName,
+            @ApiParam(value = "状态(0-空闲，1-占用)", example = "0", allowableValues = "0, 1")
+            @RequestParam Integer status){
+        List<ParkingSpot> parkingSpotList = parkingSpotService.listByParkingLot(parkingLotName,status);
+        List<ParkingSpotVO> parkingSpotVOS = beanConverter.convertList(parkingSpotList, ParkingSpotVO.class);
+        return Result.success(parkingSpotVOS);
     }
 } 
